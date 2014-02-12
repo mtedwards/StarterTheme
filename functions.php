@@ -4,7 +4,9 @@
  *
  * @package at
  */
-
+ 
+ require_once('inc/clean.php'); // do all the cleaning and enqueue here
+ require_once('inc/foundation.php'); // load Foundation specific functions like top-bar
 /**
  * Set the content width based on the theme's design and stylesheet.
  */
@@ -45,8 +47,6 @@ function at_setup() {
 		'primary' => __( 'Primary Menu', 'at' ),
 	) );
 
-	// Enable support for Post Formats.
-	add_theme_support( 'post-formats', array( 'aside', 'image', 'video', 'quote', 'link' ) );
 
 	// Setup the WordPress core custom background feature.
 	add_theme_support( 'custom-background', apply_filters( 'at_custom_background_args', array(
@@ -60,29 +60,11 @@ function at_setup() {
 endif; // at_setup
 add_action( 'after_setup_theme', 'at_setup' );
 
-/**
- * Register widgetized area and update sidebar with default widgets.
- */
-function at_widgets_init() {
-	register_sidebar( array(
-		'name'          => __( 'Sidebar', 'at' ),
-		'id'            => 'sidebar-1',
-		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-		'after_widget'  => '</aside>',
-		'before_title'  => '<h1 class="widget-title">',
-		'after_title'   => '</h1>',
-	) );
-}
-add_action( 'widgets_init', 'at_widgets_init' );
 
 /**
- * Enqueue scripts and styles.
+ * Enqueue secondary scripts 
  */
 function at_scripts() {
-	wp_enqueue_style( 'at-style', get_stylesheet_uri() );
-
-	wp_enqueue_script( 'at-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20120206', true );
-
 	wp_enqueue_script( 'at-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20130115', true );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
@@ -91,10 +73,7 @@ function at_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'at_scripts' );
 
-/**
- * Implement the Custom Header feature.
- */
-//require get_template_directory() . '/inc/custom-header.php';
+
 
 /**
  * Custom template tags for this theme.
@@ -105,11 +84,6 @@ require get_template_directory() . '/inc/template-tags.php';
  * Custom functions that act independently of the theme templates.
  */
 require get_template_directory() . '/inc/extras.php';
-
-/**
- * Customizer additions.
- */
-require get_template_directory() . '/inc/customizer.php';
 
 /**
  * Load Jetpack compatibility file.
